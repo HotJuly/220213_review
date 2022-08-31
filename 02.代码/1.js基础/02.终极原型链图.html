@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            原型链相关内容:
+                1.万物皆对象
+                    除了基本数据类型以外,所有的数据都是对象
+
+                2.所有的对象都是Object函数的实例对象
+
+                3.所有的函数都是Function的实例对象
+                    包括Function函数自己也是通过Function函数进行创建的
+                        换种说法:Function函数是自己的父亲(???)
+
+                4.在js中,函数是一等公民,它既是函数,又是对象
+                    也就是说函数可以称为函数对象
+                    因为每个函数都具有prototype属性,只有对象才能拥有属性这个东西
+
+                    函数一定是对象,对象不一定是函数
+                    函数对象是特殊的一种对象
+
+
+            问题:js中,使用c语言创建的东西有哪些?
+            解答:
+                1.Object函数
+                2.Function函数
+                3.Function.prototype原型对象
+
+            问题:什么是伪数组?
+            答案:
+                1.使用索引来存储数据
+                2.会具有length属性
+                3.虽然长得像数组,但是他无法使用数组的方法
+                    原因:因为数组的方法都存放在Array.prototype上
+                        而数组的原型对象并没有出现在伪数组的原型链上
+
+            问题:一个对象如何证明自己是个数组?
+            回答:只要数组的原型对象出现在该对象的原型链上,那么他就是个数组
+
+                例如:NodeList,HTMLCollection,arguments
+
+            在终极原型链图中,存在问题的线(都是作者后续添加的)
+                1.Function.__proto__ === Function.prototype
+                    用处有两个:
+                        1.证明Function是一个函数
+                            在Function的原型链上的能够找到所有函数都能访问的Function的原型对象
+
+                        2.保证Function能够使用所有函数都能使用的方法,例如:call,apply,bind
+
+                2.Object.__proto__ === Function.prototye
+                    同1的答案
+
+                3.Function.prototype.__proto__ === Object.prototype
+                    该线的用处,是用来说明js中,所有的函数都是对象这件事
+                        如果没有这条线,那么js中,原型链的顶点就会有两个,一个是Function,一个是Object
+                            也就是说再也不会拥有函数对象这个概念,
+                            但是函数具有对象的特点,但是原型链上的没有出现Object的原型对象
+
+                        如果没有这条线,那么所有的函数都无法使用对象的方法
+
+                4.Object.prototype.__proto__ === null
+                    Object的原型对象是一个普通对象,由Object创建得到
+                    如果不强制修改这条线,那么原型对象的__proto__应该指向自己
+                        那么未来如果js在使用原型链查找属性的时候,会出现死循环
+        
+        */
+    //    function关键字其实是new Function的语法糖
+        function Foo () {}
+        const f1 = new Foo()
+        // const f2 = new Foo()
+
+        const o1 = new Object()
+        // const o2 = {}
+
+        // Foo instanceof Object          true
+        // Foo instanceof Function        true
+        // Object instanceof Object       true
+        // Function instanceof Function   true
+        // Function instanceof Object     true
+
+        // Object instanceof Foo          false
+        // f1 instanceof Function         false
+        // f1 instanceof Object           true
+    </script>
+</body>
+</html>
