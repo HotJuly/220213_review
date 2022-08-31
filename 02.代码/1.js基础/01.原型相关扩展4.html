@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            需求:现在有一个data变量,内部存储了数据,请问如何知道该数据是什么数据类型?
+        
+            解决方案:
+                1.typeof data
+                    typeof表达式的返回值的数据类型都是string
+                        内容为:"number","string","boolean","undefined"
+                                "object"(null会错误判断),"function","symbol"
+
+                    注意点:
+                        1.null类型会被错误的判断为对象
+                        2.无法具体区分对象数据类型
+
+                2.instanceof
+                    语法使用: A instanceof B(用于判断A是否是B类型数据)
+                    返回值类型:布尔值
+                    值:true或false
+
+                    只能知道数据是不是B类型,但是无法知道到底是什么类型
+
+                3.借用Object原型对象的toString方法来实现判断数据类型的效果
+        */
+
+        var data = [1,2,3];
+        // console.log(data instanceof Array)
+
+        // var data1 = {};
+        // console.log(data1.toString());
+
+        // toString方法会返回当前数据的类型和构造函数组成的字符串,例如:"[object Object]"
+        const result = Object.prototype.toString.call(data).split(" ")[1].replace("]","");
+        console.log('result',result)
+
+        // console.log(data.toString())
+
+
+        /*
+            需求:数组降维
+            最快的方法:直接对数组使用toString方法,就可以实现降维操作
+                    但是该方法只能在数组中存放的都是基本数据类型才能使用
+        */
+        // 该数组称为4维数组,因为此处一共存在4个数组的嵌套
+        var arr = [1,2,3,[4,[5,[7,8]],6]];
+
+        console.log(arr.toString().split(","))
+    </script>
+</body>
+</html>

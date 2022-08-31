@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            原型相关
+                读取属性:会顺着原型链向上查找
+                设置属性:不会顺着原型链向上查找
+
+                小总结:
+                    如果一个对象读取一个自身没有的属性,那么会顺着原型链向上查找高属性
+                    如果一个对象设置一个自身没有的属性,那么会给当前对象添加该属性,不会走原型链
+        */
+        function Person(name){
+            this.name = name;
+        }
+
+        Person.prototype.c = 1;
+
+        var p1 = new Person("xiaoming");
+
+        // p1.c+=1;
+        // p1.c = p1.__proto__.c + 1;
+        p1.c = 1 + 1;
+
+        console.log(p1,p1.c,Person.prototype.c)
+        // 问题1:p1对象有没有c属性
+        // 问题2:p1对象的c属性读取结果
+        // 问题3:Person原型对象的c属性读取结果
+
+    </script>
+</body>
+</html>

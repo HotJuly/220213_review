@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            基本数据类型可以添加属性,不会报错,但那是没用
+            如果对基本数据类型使用.属性名的语法,
+                js引擎会自动生成一个包装类对象,实现后续效果,防止代码出错 
+                但是该包装类对象在执行完当前操作之后,会被立即销毁
+
+                该操作只适用于string,number,boolean
+        */
+        var str = "hello";
+        str.title = "world";
+        console.log(str + str.title);
+
+        
+        var num = 123;
+        num.count = 6;
+        console.log(num + num.count);
+    </script>
+</body>
+</html>
