@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            原型相关
+                实例对象在使用一个属性的时候
+                    如果自己身上没有该属性,就会顺着__proto__属性,
+                    找到自己的原型对象,在对象身上进行查询
+        
+            原型相关面试总结:
+                1.一定要关注到底是修改属性的值,还是更换了整个原型对象
+                2.是在创建实例对象之前更换的原型对象,还是创建实例对象之后更换的
+        */
+        function Person(name){
+            this.name = name;
+        }
+
+        // Person.prototype.c = 1;
+        // Person.prototype = {
+        //     c:1
+        // }
+
+        var p1 = new Person("xiaoming");
+
+        // Person.prototype.c = 1;
+        Person.prototype = {
+            c:1
+        }
+
+        console.log(p1.c)
+
+    </script>
+</body>
+</html>

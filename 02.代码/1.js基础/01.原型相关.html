@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            构造函数
+                构造函数用于创建自己类型的实例对象
+                构造函数首字母大写这个规则,是约定俗成的规则
+                只有new调用的函数才是构造函数,
+                    也就是说一个函数是不是构造函数只有在函数调用的瞬间才能知道
+
+                小总结:一个函数如果被普通调用,他就是普通函数,如果被构造调用,他就是构造函数
+
+
+
+                内存分为栈内存和堆内存:
+                    栈内存:
+                        栈内存只能存放基本数据类型,标识,地址值
+
+                    堆内存:
+                        堆内存可以存放对象数据类型(引用数据类型)
+
+                其实变量和函数名是同一个东西,官方统称为标识
+
+                注意:栈内存中只能存放基本数据类型,但是从来没说过基本数据类型只能存放栈内存中
+        */
+
+        /*
+            原型相关
+                1.所有的对象都有隐式原型属性:__proto__
+                2.所有的构造函数都有显式原型属性:prototype
+                3.对象的隐式原型指向了构造函数的显式原型
+                    每个构造函数只会有一个伴生的原型对象,只不过是找这个对象的渠道有很多
+
+                4.每个原型对象都具有constructor属性,指向自己对应的构造函数
+
+            原型对象是每个构造函数创建的时候会同时创建的对象,跟构造函数之间具有对应关系
+            问题:如果一个函数不是构造函数,会不会拥有属于自己的原型对象
+            答案:有,每个函数都会在创建自己的时候,同时创建原型对象,
+                只不过不是构造函数的话,原型对象没有研究的意义
+        
+            原型对象出现的目的:
+                为了减少内存的消耗,将所有实例对象都能使用的方法存放在原型对象上
+                    未来哪个对象需要使用该方法,可以找原型对象借用
+        */
+
+        function Person(name){
+            this.name = name;
+            // this.eat=function(){
+            //     console.log('eat')
+            // }
+            // return this;
+        }
+
+        Person.prototype.eat = function(){
+            console.log('eat')
+        };
+
+        // function person(){
+        // }
+
+        var p1 = new Person("xiaoming");
+        // var p2 = new Person("xiaoming");
+        // var p3 = new Person("xiaoming");
+        console.log('p1',p1)
+        // p1.eat()
+        // p2.eat()
+        // p3.eat()
+        // console.log(p1.eat === p2.eat)
+
+        /*
+            new关键字做的事情
+                1.调用函数,并且自动将实参的数据传递给形参
+                2.创建this标识,并向内部注入一个对象
+                3.将当前函数这一瞬间的显式原型属性的值复制给创建的实例对象的隐式原型属性
+                4.默认自动返回this
+        */
+
+        function Dog(name){
+            var that = new Object();
+
+            that.__proto__ = Dog.prototype;
+
+            that.name=name;
+
+            return that;
+        }
+
+
+        var dog = Dog("pika");
+        
+        Dog.prototype={}
+        console.log('dog',dog)
+
+    </script>
+</body>
+</html>
