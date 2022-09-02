@@ -158,6 +158,8 @@
 
         
         // ----------------------
+        // 对象的属性不是变量,变量的读取方式直接写变量名即可
+        // 想要读取对象的某个属性,语法obj.a
         // var a = 1;
         // let obj = {
         //     a:2,
@@ -197,18 +199,131 @@
             // fn();
             // console.log(x);
 
-            function fn(x,y = function(){x=3;console.log(x)}){
-                var x;
-                console.log(x);
-                x = 2;
-                y();
-                console.log(x);
-            }
-            var x
-            x = 1;
+            // function fn(x,y = function(){x=3;console.log(x)}){
+            //     var x;
+            //     console.log(x);
+            //     x = 2;
+            //     y();
+            //     console.log(x);
+            // }
+            // var x
+            // x = 1;
 
-            fn();
-            console.log(x);
+            // fn();
+            // console.log(x);
+
+        // ------------------
+            // var x = 1;
+            // function fn(x,y = function(){x=3;console.log(x)}){
+            //     console.log(x);
+            //     // var x = 2;
+            //     y();
+            //     console.log(x);
+            // }
+
+            // fn();
+            // console.log(x);
+
+
+            // function fn(x,y = function(){x=3;console.log(x)}){
+            //     console.log(x);
+            //     // var x = 2;
+            //     y();
+            //     console.log(x);
+            // }
+            // var x;
+            // x = 1
+            // fn();
+            // console.log(x);
+
+            // 内部作用域可以修改外部作用域的变量的值
+            // var a = 1;
+            // function fn(){
+            //     a =2;
+            // }
+            // fn();
+            // console.log(a)
+
+        //--------------------
+            // var x = 1;
+            // function fn(xx,y = function(){x=3;console.log(x)}){
+            //     console.log(x);
+            //     var x = 2;
+            //     y();
+            //     console.log(x);
+            // }
+
+            // fn();
+            // console.log(x);
+
+
+            // function fn(xx,y = function(){x=3;console.log(x)}){
+            //     var x;
+            //     console.log(x);
+            //     x = 2;
+            //     y();
+            //     console.log(x);
+            // }
+            // var x
+            // x = 1;
+            // fn();
+            // console.log(x);
+
+
+        //--------------------
+            // var x = 1;
+            // function fn(x = 4,y = function(){x=3;console.log(x)}){
+            //     console.log(x);
+            //     var x = 2;
+            //     y();
+            //     console.log(x);
+            // }
+
+            // fn();
+            // console.log(x);
+
+            
+            // function fn(x = 4,y = function(){x=3;console.log(x)}){
+            //     var x;
+            //     console.log(x);
+            //     x = 2;
+            //     y();
+            //     console.log(x);
+            // }
+
+            // var x;
+            // x = 1;
+            // fn();
+            // console.log(x);
+
+    //----------------
+    // 如果具名函数表达式中的函数会预解析,那么此处的答案就是1,1
+    // 如果具名函数表达式中的函数不会预解析,那么此处的答案就是函数,函数
+    // 结果答案是:函数,1
+    /*
+        这题算是js的漏洞
+            具名函数表达式的情况
+                1.该函数的名称只能在这个函数中可见
+                2.该函数的名称的内容无法被修改
+    
+    */
+        // var a = 1;
+        // var obj = {
+        //     a:2,
+        //     fn:function a(){
+        //         a=3;
+        //         console.log(a);
+        //     }
+        // }
+
+        // obj.fn();
+        // console.log(a);
+
+        (function a(){
+            a="haha";
+            console.log(1,a)
+        })();
+        console.log(2,a)
     </script>
 </body>
 </html>
