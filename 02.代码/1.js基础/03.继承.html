@@ -72,7 +72,12 @@
         // 修改了构造函数显式原型属性的指向,变为Person的实例对象
         Student.prototype = new Person();
         Student.prototype.constructor = Student;
-        
+
+        // 这里在重写say方法
+        // 他并不会影响到父类的同名函数,只是为了自己的实例对象就会优先使用该方法,而不是父类的say
+        Student.prototype.say = function(){
+            console.log(`我叫${this.name},我今年${this.age},我有${this.price}钱`);
+        }
 
         var s1 = new Student("xiaowang",22,10000000);
 
@@ -87,6 +92,12 @@
                     => Student.prototype.__proto__.say
                     => Person.prototype.say
                 3.s1在原型对象的隐式原型上找到了say方法,就实现调用
+
+            重写:
+                父类具有一个方法,但是不满足子类的要求
+                那么子类在自己的原型对象上,也创建一个同名的方法,称为重写
+
+                最经典的重写:就是Array重写了toString方法,防止自己的实例对象使用Object的toString方法
         */
         s1.say();
 
