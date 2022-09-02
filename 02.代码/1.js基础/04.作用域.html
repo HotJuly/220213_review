@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            在编程界中,作用域一共分为两种:
+                1.词法作用域(又称为静态作用域)
+                    当前作用域与函数的声明位置有关,与调用位置无关
+
+                2.动态作用域
+                    当前作用域与函数的声明位置无关,与调用位置有关
+
+                结论:javascript只有词法作用域,没有动态作用域
+
+            作用域
+                1.什么是作用域?
+                    变量的使用范围
+                    约束了变量所能够被访问的范围
+
+                    javascript中,作用域只与函数的声明位置有关,与调用位置无关
+
+                2.预解析
+                    在js代码编译的时候,会将变量和函数提升到最顶端
+                    预解析分为两种:
+                        1.变量提升
+                            变量提升只是部分提升,只会将标识的声明提升到最顶端,
+                                标识的赋值依旧留在原地
+
+                        2.函数提升
+                            函数提升是整体提升,他会将标识的声明和标识的赋值一起提升到最顶端
+
+                        变量,函数名都成为标识
+                        注意:
+                            1.一定要区分清楚标识的声明和标识的赋值
+                            2.函数表达式的提升属于变量提升,只会提升标识声明,不会提升标识的赋值
+
+                3.预解析的优先级
+                    函数提升优先于变量提升
+
+                4.预解析后提升的位置
+                    预解析后,变量提升只会提升到当前作用域的最顶端
+
+                5.js中一共有几种作用域?
+                    一共3种
+                    1.全局作用域
+                    2.函数作用域(又称为局部作用域)
+                    3.块级作用域(ES6新增)
+                        使用let或者const可以创建出块级作用域
+                            let配合{}的确会创建块级作用域,
+                                但是是指let声明的变量,会存在于这个块级作用域中
+                                注意:是必须在{}中使用let,不是let里面使用{}
+
+                6.如果函数使用了ES6中的形参默认值语法
+                    1.那么函数就会创建一个块级作用域,
+                        内部所有的代码都会在这个块级作用域中执行
+                    2.如果书写了形参默认值的话,调用该函数的时候没传入数据,
+                        那么无论是函数作用域还是块级作用域,同名的变量,形参的值都会被赋予默认值
+        */
+
+        // var a = 1;
+
+        // function fn(){
+        //     var a = 2;
+        //     function inner(){
+        //         console.log(a);
+        //     }
+        //     return inner
+        // }
+
+        // const result = fn();
+        // result();
+
+
+        // ----------------------
+        // console.log(a);
+        // var a = 2;
+
+        // var a;
+        // console.log(a);
+        // a = 2;
+
+        // ----------------------
+        // var a = 1;
+        
+        // console.log(a)
+
+        // var a = function (){
+        //     console.log(2)
+        // }
+
+        // function a(){
+        //     console.log(3)
+        // }
+
+
+
+        // ----------------------
+        // var a = 1;
+        // function fn(){
+        //     console.log(a,b)
+        //     var a = 2;
+        //     var b = 3;
+        // }
+        // fn();
+        // console.log(a,b)
+
+
+        // function fn(){
+        //     var a;
+        //     var b;
+        //     console.log(a,b)
+        //     a = 2;
+        //     b = 3;
+        // }
+        // var a
+        // a = 1;
+        // fn();
+        // console.log(a,b)
+
+
+        // ----------------------
+        // var a = 1;
+        // var obj = {
+        //     a:2,
+        //     fn:function(){
+        //         console.log(a)
+        //     }
+        // }
+        // var a = 3;
+        // var fn2 = obj.fn;
+        // fn2();
+
+
+        // var a;
+        // var a;
+        // var obj;
+        // var fn2;
+        // a = 1;
+
+        // // 注意:对象内部没有作用域
+        // obj = {
+        //     a:2,
+        //     // 此处其实隐藏着一个函数表达式,所以该函数无论如何都不会提升
+        //     fn:function(){
+        //         console.log(a)
+        //     }
+        // }
+
+        // a = 3;
+        // fn2 = obj.fn;
+        // fn2();
+
+        
+        // ----------------------
+        // var a = 1;
+        // let obj = {
+        //     a:2,
+        //     fn:function(){
+        //         console.log(a)
+        //     }
+        // }
+        // var a = 3;
+        // var fn2 = obj.fn;
+        // fn2();
+
+        // if(flag){
+        //     let a = 1;
+        // }
+
+
+        // ----------------------
+        // 前言:只要函数使用了默认值语法,那么函数内部的代码都会在新生成的块级作用域中执行
+        // function fn(x,y = 4){
+        //     // console.log(x,y)
+        //     var x = 1;
+        //     var y = 2;
+        //     console.log(x,y)
+        // }
+        // fn()
+
+        // -------------------
+        // 前言:形参就是变量
+            // var x = 1;
+            // function fn(x,y = function(){x=3;console.log(x)}){
+            //     console.log(x);
+            //     var x = 2;
+            //     y();
+            //     console.log(x);
+            // }
+
+            // fn();
+            // console.log(x);
+
+            function fn(x,y = function(){x=3;console.log(x)}){
+                var x;
+                console.log(x);
+                x = 2;
+                y();
+                console.log(x);
+            }
+            var x
+            x = 1;
+
+            fn();
+            console.log(x);
+    </script>
+</body>
+</html>
