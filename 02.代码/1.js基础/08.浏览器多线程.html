@@ -16,17 +16,49 @@
       aaaaaaa
   </div>
   <script>
-      Promise.resolve().then(() => { // ?任务
+    /*
+        页面整体流程:
+            主线程代码执行结束->清空微任务队列->GUI线程渲染页面->执行下一个宏任务
+
+            GUI线程和JS线程(又称为JS引擎),这两个家伙互斥,同一时间只会有一个人工作
+
+            问题:为什么ES6开始之后,需要新增微任务这东西?
+            回答:
+                多次在微任务中修改DOM,只会重新渲染页面一次
+                多次在宏任务中修改DOM,页面会重新渲染多次
+
+                微任务更新页面有类似防抖的效果
+
+                例如:Vue更新数据是同步更新,更新页面是异步更新
+                扩展:Vue更新视图其实就是在微任务中更新页面
+
+        页面更新流程:
+            页面修改之后->清空微任务队列->GUI线程渲染页面->执行下一个宏任务
+    */
+      Promise.resolve().then(() => { // 微任务
           alert('promise1') // 页面渲染了吗?
       }) 
-      Promise.resolve().then(() => { // ?任务
+
+      Promise.resolve().then(() => { // 微任务
           alert('promise2') // 页面渲染了吗?
       }) 
-      setTimeout(() => {// ?任务
+
+      setTimeout(() => {// 宏任务
           alert(document.getElementById('content').innerHTML)  // 页面渲染了吗?
       }, 0)
-      document.getElementById('test').onclick = () => {// ?任务
+
+      document.getElementById('test').onclick = () => {// 宏任务
+        // DOM的更新是同步更新,但是页面渲染是异步渲染
           document.getElementById('content').innerHTML = 'xxxx'
+        //   document.getElementById('content').innerHTML = 'xxxx1'
+        //   document.getElementById('content').innerHTML = 'xxxx2'
+        //   document.getElementById('content').innerHTML = 'xxxx3'
+        //   document.getElementById('content').innerHTML = 'xxxx4'
+        //   document.getElementById('content').innerHTML = 'xxxx5'
+        //   document.getElementById('content').innerHTML = 'xxxx6'
+        //   document.getElementById('content').innerHTML = 'xxxx7'
+        //   document.getElementById('content').innerHTML = 'xxxx8'
+        //   document.getElementById('content').innerHTML = 'xxxx'
 
           alert(document.getElementById('content').innerHTML)
 
@@ -38,6 +70,7 @@
               alert('promise3') //页面更新渲染了吗?
           }) 
       }
+      
       alert('1111') // 页面渲染了吗?
 
   </script>
