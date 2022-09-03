@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+        /*
+        面试题:请问call和bind的区别?
+        回答:
+            1.相同点
+                1.他们都可以改变this指向
+                    他们第一个实参都是用于接收开发者需要的this指向
+                    
+
+                2.参数个数相同
+                    call方法接收参数个数0-无限大
+                    bind方法接收参数个数0-无限大
+
+                    他们两个都会将第二个实参开始的数据,传递给被借调函数作为实参
+
+                3.如果第一个实参没有传入,或者是undefined或者是null,那么this指向就是window
+
+            2.不同点
+                1.函数的执行时机不同
+                    call方法会同步执行被借调函数
+                    bind方法不会同步执行被借调函数
+
+                2.返回值不同
+                    call方法会将被借调函数的执行结果进行返回
+                    bind方法会返回一个被修改了this指向的全新函数
+                        注意:与原先的被借调函数不是同一个函数
+
+                3.修改this的时效性不同
+                    call方法只会临时修改本轮执行的this指向,对后续操作不会有任何影响
+                    bind方法他会永久修改函数的this指向,未来无法再发生变化
+                        即便对返回的函数再次使用call,apply,bind也无法修改他的this指向
+
+                4.传参的次数不同
+                    由于call方法调用之后,会立即执行被借调函数,
+                        所以只有一次传入实参的机会
+                    由于bind方法调用之后,返回的是一个全新的函数,并不会立即执行该函数
+                        所以bind方法拥有两次传入实参的机会
+
+        */
+
+        function a(x,y,z) {
+            console.log(this,x,y,z);
+            return x+y+z
+        }
+
+        var obj = {
+            name:"xiaoming"
+        }
+
+        // const result = a.call(obj,1,2,3);
+        // a();
+        // console.log('call',result)
+
+        // const a1 = a.bind(obj,1);
+        // // console.log('bind',a1===a)
+        // a1(2,3);
+
+        // var obj2 = {
+        //     name:"老6"
+        // }
+        // const a2 = a1.call(obj2);
+
+        // a2();
+        // a1();
+        // a1();
+        // a1();
+        // a1();
+
+        //----------------------
+        Function.prototype.myBind = function(thatThis,...args){
+            /*
+                this-> a (也就是被借调函数)
+                thatThis-> obj (开发者指定的this对象)
+            */
+            var that = this;
+
+            return function(...args2){
+                return that.call(thatThis,...args,...args2);
+                // that.apply(thatThis,args);
+            }
+        }
+
+        // const a1 = a.myBind(obj,1);
+        // const result = a1(2,3);
+        // console.log(result)
+
+        //-----------------------
+        // 函数柯里化
+        // 现在工厂需要创建10个女生的对象模型,每个对象都具有自己的姓名,年龄,性别
+
+        // function person(sex,age,name){
+        //     return {
+        //         sex,
+        //         age,
+        //         name
+        //     }
+        // }
+
+        // var p1 = person("女",23,"xiaohong")
+        // var p2 = person("女",25,"xiaohong1")
+        // var p3 = person("女",27,"xiaohong2")
+        // var p4 = person("女",28,"xiaohong3")
+        // var p5 = person("女",29,"xiaohong4")
+        // console.log(p1)
+
+        // function person(sex){
+        //     return function(age){
+        //         return function(name){
+        //             return {
+        //                 sex,
+        //                 age,
+        //                 name
+        //             }
+        //         }
+        //     }
+        // }
+
+        // var woman = person("女");
+        // var young = woman(18);
+        // var p1 = young("xiaohong")
+        // var p2 = young("xiaohong1")
+        // var p3 = young("xiaohong2")
+        // var p4 = young("xiaohong3")
+        // var p5 = young("xiaohong4")
+        // console.log(p1)
+
+        //---------------------
+        function person(sex,age,name){
+            return {
+                sex,
+                age,
+                name
+            }
+        }
+
+        var woman = person.myBind(null,"女",18);
+        var p1 = woman("xiaohong")
+        var p2 = woman("xiaohong1")
+        var p3 = woman("xiaohong2")
+        var p4 = woman("xiaohong3")
+        var p5 = woman("xiaohong4")
+
+        console.log(p1);
+    </script>
+  </body>
+</html>

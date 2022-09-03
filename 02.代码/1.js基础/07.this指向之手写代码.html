@@ -8,32 +8,6 @@
   </head>
   <body>
     <script>
-      /*
-            this相关
-                this是一个关键字,我们无法使用var去声明this这个变量
-                this其实本质上就是一个变量,只是说该变量的值不受我们控制
-                    this的值由浏览器直接分配赋值
-
-                this中会存放的是当前函数的调用者
-
-                this的内容和函数的声明位置无关,只和调用方式有关
-        
-                this的常见指向:
-                    1.普通调用->this指向window
-                        直接通过函数名调用,例如:a()
-
-                    2.隐式调用->this指向前面的对象
-                        通过对象身上找到的方法进行调用,例如:obj.fn()
-
-                        注意:a.b.c.d.e.f()->this就是f之前的e对象
-
-                    3.构造调用->this指向当前创建的实例对象
-                        通过new构造调用函数,例如new Person()
-
-                    4.显式调用->this指向指定的对象
-                        通过call,apply,bind方法调用函数,例如 Person.call(obj)
-
-        */
         /*
         名称统一,a.call(obj)中,a称为被借调函数,call称为借调函数
         面试题:请问call和apply的区别是什么?
