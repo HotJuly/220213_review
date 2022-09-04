@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input id="fileInput" type="file">
+    <button id="submit">上传</button>
+    <img id="avatarImg" src="" alt="" srcset="">
+    
+    
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <script>
+        /*
+            1.通过页面上的input[type=file]标签,让用于选择文件
+                其实就是相当于把文件读取到浏览器的内存中了
+
+            2.通过change事件的回调函数,可以获取到用户选择的文件信息对象
+                API:this.files[0]
+
+            3.创建FormData对象,并向该对象中添加key和value
+                只有使用append方法才能将图片放进去
+
+            4.通过ajax,将formData对象发送给服务器,实现图片的上传功能
+
+            5.服务器返回的响应体中,会有当前图片的路径,
+            我们可以将该路径在页面使用img标签进行展示
+        
+        */
+        let formData;
+        var fileInput = document.querySelector('#fileInput');
+
+        fileInput.onchange=function(){
+            // console.dir(this)
+
+            const file = this.files[0];
+
+            formData = new FormData();
+
+            formData.append("file",file);
+            // 不需要打印对象,因为看不到该属性,但其实添加成功了
+            // console.log(formData)
+
+        }
+
+        var submit = document.querySelector('#submit');
+        submit.onclick=async function(){
+            
+            const result = await axios.post("http://localhost:3000/upload",formData)
+            // console.log('result',result)
+            const url = result.data;
+
+            var avatarImg = document.querySelector('#avatarImg');
+            avatarImg.src=`http://localhost:3000${url}`;
+            
+        }
+        
+    </script>
+</body>
+</html>
