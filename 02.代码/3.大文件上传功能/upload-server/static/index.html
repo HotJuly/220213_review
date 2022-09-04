@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>上传文件</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+
+  <body>
+    <input type="file" id="uploaderInput" multiple="multiple" />
+    <div id="videoContent" style="visibility:hidden">
+      <video id="video" src="" style="width:400px" muted autoplay controls></video>
+    </div>
+    进度:
+    <div id="process">0</div>
+  </body>
+</html>
+<script src="./js/jquery-1.12.4.js"></script>
+<script src="./js/md5.js"></script>
+<script src="./js/axios.js"></script>
+<script>
+  // 1.给uploaderInput元素绑定change事件,用于监视用户上传视频功能
+  $('#uploaderInput').on("change",function(){
+
+    // 2.通过this.files[0]获取到用户上传的文件
+    // console.log(this.files[0]);
+    const file = this.files[0];
+
+    uploadOne(file);
+  })
+
+  // 该函数用于实现上传一个文件功能
+  async function uploadOne(file){
+
+    // 通过文件的内容生成hash值,除非文件的内容完全相同,否则两个文件的hash值不可能相同
+    // 文件内容可以生成hash字符串,但是无法通过hash字符串反推文件的内容
+    // hash值的目的就是为了验证上传文件的过程中,有没有丢失部分内容,如果丢失了,那么两个hash值将会不一样
+    // 1.获取当前文件的唯一标识
+    const hash = await getHash(file);
+
+    // 根据服务器的要求生成文件名称
+    const i = file.name.lastIndexOf('.');
+
+    const filename = file.name.slice(0,i) + new Date().getTime() + file.name.slice(i);
+    // console.log('filename',filename)
+
+    // 获取当前文件的总大小
+    const size = file.size;
+    // 设置每次切割的文件的大小,相当于是每次切割2MB的数据
+    const shareSize = 2*1024*1024;
+
+    // 计算当前切割的份数,注意份数需要向上取整
+    const total = Math.ceil(size/shareSize);
+
+    // 用于记录当前上传了多少份
+    let index = 0;
+
+    upload();
+
+    // 该函数用于实现自动切割文件内容,并发送请求,上传文件
+    async function upload(){
+      // 文件切割的起点
+      const start = index*shareSize;
+
+      // 文件切割的终点
+      const end = (index+1)*shareSize>size?size:(index+1)*shareSize;
+
+      // 对文件的内容进行切割,每次最多切割2MB
+      const data = file.slice(start,end);
+
+      const formData = new FormData();
+
+      // 根据服务器的要求,给formData对象添加指定的属性名和属性值
+      // 属性名不能乱写,写错了服务器拿不到数据
+      formData.append("data",data);
+      formData.append("index",index);
+      formData.append("total",total);
+      formData.append("filename",filename);
+      formData.append("hash",hash);
+
+      const result = await axios.post('/uploadVideo',formData);
+      // console.log('result',result);
+
+      index++;
+
+      if(index<total){
+        // 能进入这里,说明当前文件还没有完全上传成功,只上传一部分
+
+        $('#process').text(result.data.process);
+        upload();
+      }else{
+        // 能进入这里,说明当前文件已经完全上传成功,服务器得到的所有的文件内数据
+
+        $('#videoContent').css("visibility","visible");
+        $('#video').attr('src',result.data.videoUrl);
+        $('#process').text("文件顺利上传结束");
+      }
+
+    }
+
+  }
+
+  // 用于生成文件的唯一标识,hash值
+  // 生成hash的过程,涉及到读取文件的内容,也就是I/O操作,所以是异步操作
+  // 所以getHash返回值写成promise对象比较好
+  function getHash(file){
+    return new Promise((resolve)=>{
+      // 1.生成文件读取器
+        const reader = new FileReader();
+
+      // 2.告知读取器要读取的文件和输出的格式
+      // 该API是将文件的内容以base64字符串格式输出
+        reader.readAsDataURL(file);
+
+      // 3.绑定监听,监视文件读取器读取成功文件的操作
+      // 通过event可以获取到文件的base64字符串
+        reader.onload=function(event){
+          // console.log('reader load',event.target.result)
+          const base64Str = event.target.result
+
+          // 4.根据base64字符串,生成唯一标识hash值
+          // hex_md5方法可以根据一个字符串,生成一个唯一的hash值
+          // 这个md5.js包功能不完善,有BUG,所以大家需要选择复习中的04视频进行尝试
+          const hash = hex_md5(base64Str);
+          // console.log('hash',hash)
+
+          resolve(hash);
+        }
+    })
+  }
+</script>
