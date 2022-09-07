@@ -1,102 +1,82 @@
 <template>
   <div id="app">
-    <!-- <h1>name:{{user.name | nameFilter}}</h1> -->
-    <h1>name:{{user.name}}</h1>
-    <h1>age:{{user.age}}</h1>
-    <h1>c:{{c}}</h1>
-    <button @click="addSex">添加性别</button>
-    <h1>pageX:{{x}}</h1>
-    <h1>pageY:{{y}}</h1>
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <h1>username:{{username}}</h1>
+    <h2>nameCom:{{nameCom}}</h2>
+    <h2 @click="changeName">name:{{user.name}}</h2>
+    <HelloWorld :msg="a" :sendData="sendData"/>
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-// import mixins from '@/mixins';
-import position from '@/mixins/position';
+/*
+  .vue文件向外暴露的只是一个配置对象
+  后续Vue会根据该配置对象,生成对应的组件实例的构造函数
 
+  问题:data为什么不能是对象类型,必须是函数类型?
+  回答:
+    1.如果data是一个对象数据类型,那么由组件构造函数生成的所有的组件实例对象,
+      都会共享同一个data对象,那么最终导致,其中一个组件更新状态,其余组件会一起发生变化
+    2.如果data是一个函数,那么该函数每次调用都会返回一个全新的对象,相当于是工厂函数
+      这样才能保证每个组件实例都拥有属于自己的data对象
+*/
 export default {
   name: 'App',
   components: {
     HelloWorld
   },
-  mixins:[position],
   data() {
     return {
+      _a:1,
+      a:2,
+      username:"xiaoming",
       user:{
-        name:"xiaoming",
+        name:"xiaohong",
         age:23
-      },
-      c:1
+      }
     }
   },
   mounted() {
-    // console.log('mounted',this.$options.name)
+    // console.log(this._a,this.a)
   },
   methods:{
-    addSex(){
-      /*
-        响应式属性的定义:
-          当属性值被修改之后,页面会渲染出最新结果,这种属性称为响应式属性
-
-        响应式属性的创建时机:
-          1.当组件初始化的时候,
-            会将data返回的对象进行深度劫持,所有属性都变成响应式属性
-
-          2.当响应式属性值更新的时候,
-            如果更新的值是个对象,那么该对象内部所有的属性都会变成响应式属性
-      
-      */
-      // this.user.sex = "男"
-      // 此处更新了响应式属性的值,页面会异步发生渲染(视图会异步更新)
-      // 当视图更新的时候,此时发现sex具有属性值,就顺带一起渲染了
-      // Vue更新视图的范围是整个组件
+    sendData(data){
+      // console.log('sendData',data)
+      // console.log(this)
+      this.a = data;
+    },
+    changeName(){
       // this.user = {
-      //   ...this.user,
-      //   // sex:"男"
+      //   name:"xiaolv"
       // }
-      // this.user.sex = "男"
-      // console.log(this.user)
-
-      // Vue.set(this.user,"sex","男")
-      // this.$set(this.user,"sex","男")
-
-      // setTimeout(()=>{
-      //   this.user.sex = "女"
-      //   console.log(this.user)
-      // },2000)
-
-
-      //------------------
-      // 使用delete关键字删除响应式属性,属性可以成功删除,但是页面不会渲染最新结果
-      // delete this.user.name;
-      // Vue.delete(this.user,"name");
-      // this.$delete(this.user,"name");
-      // console.log(this.user)
-
+      this.user.name = "xiaolv"
     }
   },
-  filters:{
-    nameFilter(value){
-      // console.log('nameFilter',value)
-      // console.log(this)
-      return value + "xixi"
-    }
+  computed:{
+    nameCom(){
+      console.log('nameCom')
+      return this.username + "帅哥"
+    },
+    // a:()=>{}
+  },
+  watch:{
+    a(){
+      console.log('a update')
+    },
+    // user(){
+    //   console.log('user update')
+    // },
+    // user:{
+    //   handler:function(){
+    //     console.log('user update')
+    //   },
+    //   deep:true
+    // },
+    "user.name"(){
+      console.log('user.name update')
+    },
   }
 }
-/*
-  需求:当用户鼠标移动时,页面显示当前用户鼠标的坐标
-  拆解:
-    1.如何知道用户鼠标移动?
-      绑定事件监听
-      事件源:document
-      事件名:mousemove
-
-    2.如何知道用户鼠标的坐标?
-    3.如何在页面上显示鼠标坐标?
-      使用状态数据来动态显示坐标位置
-*/
 </script>
 
 <style>

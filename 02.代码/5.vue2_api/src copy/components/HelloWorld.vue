@@ -7,18 +7,10 @@
 <script>
 export default {
   name: 'HelloWorld',
-  // props: ["msg"],
   props: {
-    // msg:Number,
-    msg:{
-      type:Number|String,
-      require:true
-    },
-    sendData:Function
+    msg: String
   },
   mounted(){
-    // console.log('props',this.msg)
-    this.sendData('heihei');
   }
 }
 </script>
