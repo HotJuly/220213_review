@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+// import HelloWorld from '@/components/HelloWorld'
 
 Vue.config.productionTip = false
 
@@ -43,6 +44,10 @@ Vue.config.productionTip = false
 // Vue.config.ignoredElements = [
 //   "About"
 // ]
+
+
+// const component = Vue.extend(HelloWorld);
+// new component().$mount("#app")
 
 new Vue({
   render: h => h(App),
