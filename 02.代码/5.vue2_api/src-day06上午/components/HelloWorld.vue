@@ -1,5 +1,6 @@
 <template>
   <div class="hello">
+    <h1>hello world</h1>
     <h1>{{ msg }}</h1>
   </div>
 </template>
@@ -10,10 +11,13 @@ export default {
   props: {
     msg: String
   },
+  a:4,
   mounted(){
+    // console.log(this.$options.name,'a',this.$options.a)
   }
 }
 </script>
 
+<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 </style>
