@@ -1,32 +1,25 @@
 <template>
   <div id="app">
-    <h1 ref="h1">{{msg}}</h1>
-    <HelloWorld ref="hello" msg="Welcome to Your Vue.js App" />
-
-    <BigImage/>
+    <h1>App username:{{username}}</h1>
+    <HelloWorld :username.sync="username" msg="Welcome to Your Vue.js App" />
+    <!-- <HelloWorld :username="username" @update:username="(data)=>username=data" msg="Welcome to Your Vue.js App" /> -->
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-import BigImage from './components/BigImage.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
-    BigImage
+    HelloWorld
   },
   data() {
     return {
-      msg:"我是初始化数据"
+      username:"xiao"
     }
   },
   mounted() {
-      // console.log('数据代理',this.msg)
-      // console.log('直接读取数据',this.$data)
-    // console.log('$children',this.$children[0].msg2)
-    console.log(this.$refs.hello.msg2)
   },
 }
 </script>
