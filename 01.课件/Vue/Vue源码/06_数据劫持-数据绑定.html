@@ -5,7 +5,10 @@
     <title>06_数据劫持-数据绑定</title>
 </head>
   <body>
-    <div id="app"><p class="b">{{msg}}</p></div>
+    <div id="app">
+      <p class="b">{{msg}}</p>
+      <p class="b">{{person.name}}</p>
+    </div>
     <script src="./js/observer.js"></script>
     <script src="./js/watcher.js"></script>
     <script src="./js/compile.js"></script>
@@ -41,6 +44,8 @@
           },
         }
       });
+
+      vm.msg = 'hello atguigu';
 
 
     </script>

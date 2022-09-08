@@ -115,12 +115,15 @@ function Dep() {
 
 Dep.prototype = {
     addSub: function(sub) {
+        // dep.addSub(watcher);
+        // 此行代码的作用,就是dep对象收集到了与自身相关的watcher对象
+        // 当前响应式属性,已经知道了他与页面上的哪些插值语法有联系
         this.subs.push(sub);
-
     },
 
     depend: function() {
         Dep.target.addDep(this);
+        // watcher.addDep(dep);
     },
 
     removeSub: function(sub) {
@@ -131,8 +134,12 @@ Dep.prototype = {
     },
 
     notify: function() {
+        // subs数组中存放的是使用了当前响应式属性的所有watcher对象
         this.subs.forEach(function(sub) {
             sub.update();
+
+            // 相当于通知对应的插值表达式进行DOM更新,展示最新数据
+            // watcher.update();
         });
     }
 };

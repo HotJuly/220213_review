@@ -11,6 +11,7 @@ function Compile(el, vm) {
 
         this.$fragment = this.node2Fragment(this.$el);
 
+        // init中会将文档碎片中所有的插值语法和指令都解析结束
         this.init();
 
         this.$el.appendChild(this.$fragment);
@@ -22,6 +23,7 @@ Compile.prototype = {
     node2Fragment: function(el) {
         // 该函数的用处,就是将el元素中所有的直系子节点全部移到文档碎片中
         // el->#app元素
+        // 节点放入到文档碎片中后,会从页面上消失,即便修改该节点的内容,页面也不会重新渲染
         var fragment = document.createDocumentFragment(),
             child;
 
@@ -85,6 +87,7 @@ Compile.prototype = {
         // nodeAttrs->获取p元素节点上所有标签属性对象组成的伪数组
         var nodeAttrs = node.attributes,
             me = this;
+        // console.log('nodeAttrs',nodeAttrs);
 
         [].slice.call(nodeAttrs).forEach(function(attr) {
             var attrName = attr.name;
@@ -187,8 +190,12 @@ var compileUtil = {
         // textUpdater && textUpdater(text节点, this._getVMVal(vm, "msg"));
         // textUpdater && textUpdater(text节点, "hello mvvm");
 
-        // new Watcher(vm, exp, function(value, oldValue) {
-        //     updaterFn && updaterFn(node, value, oldValue);
+        new Watcher(vm, exp, function(value, oldValue) {
+            updaterFn && updaterFn(node, value, oldValue);
+        });
+
+        // new Watcher(vm, "msg", function(value, oldValue) {
+        //     textUpdater && textUpdater(text节点, value, oldValue);
         // });
         
     },
@@ -245,6 +252,7 @@ var updater = {
     textUpdater: function(node, value) {
         // text节点, "hello mvvm"
         node.textContent = typeof value == 'undefined' ? '' : value;
+        // text节点.textContent =  value;
     },
 
     htmlUpdater: function(node, value) {

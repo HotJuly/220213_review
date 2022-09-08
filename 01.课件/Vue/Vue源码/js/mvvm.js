@@ -63,7 +63,35 @@ function MVVM(options) {
 
             2.页面渲染最新的结果
                 将得到的最新数据,通过原生DOM的CRUD方法更新到页面上展示
+
+        准备工作:
+            1.在深度数据劫持data对象的时候,会给每个响应式属性都生成一个对应的dep对象
+            2.在模版解析的时候,会给每个插值语法生成一个对应的watcher对象
+            3.在生成watcher对象的时候,会调用watcher.get方法获取当前插值语法的结果
+            4.在get函数中,会将Dep.target修改为当前的watcher对象
+            5.watcher对象在调用watcher.getVMVal方法的时候,会去收集相关的dep
+            6.watcher读取对应的响应式属性值的时候,会触发该属性数据劫持的get方法
+            7.在数据劫持的get方法中,由于Dep.target已经有值,就会执行dep.depend方法
+            8.在dep.depend方法中,会调用watcher的addDep方法
+            9.在addDep方法中,watcher会使用depIds对象收集与自身相关的dep对象
+            10.dep对象也会使用addSub方法,收集与自身相关的所有watcher对象
+
+            小总结:
+                也就是说,经过这套准备工作之后
+                    实现了插值语法收集到了自己使用过的响应式属性
+                        响应式属性也收集到了使用自己的插值语法
     
+        响应式更新页面的流程:
+            1.当开发者使用this.msg=123时,会触发数据代理的set方法
+            2.msg数据代理会将传递的123,再次传给this._data.msg进行赋值,
+                会触发数据劫持的set方法
+            3.数据劫持的set方法中,会执行dep.notify方法
+            4.dep.notify方法会遍历自己的subs数组,得到内部存储的所有watcher对象
+            5.调用这些watcher对象的update方法,通知对应的节点进行DOM更新
+            6.在update方法中,Vue会比较表达式的新旧两个值,
+                如果两值不相同,就调用watcher.cb函数
+            7.在watcher的cb函数中,会调用对应的更新器函数,用于更新指定的节点
+            8.最终当DOM节点更新结束之后,GUI线程会将最新的结果绘制到页面上
     */
   /*
     MVVM源码第二部分:数据劫持
@@ -97,6 +125,8 @@ function MVVM(options) {
 
         注意点:
             每个响应式属性会创建一个dep对象
+
+        
    */
 
   observe(data, this);
@@ -170,6 +200,7 @@ MVVM.prototype = {
     //     },
     //     set: function proxySetter(newVal) {
     //         vm._data["msg"] = newVal;
+    //         vm._data["msg"] = "hello atguigu";
     //     }
     // });
   },
