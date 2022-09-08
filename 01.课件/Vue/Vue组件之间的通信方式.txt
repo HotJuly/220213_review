@@ -37,6 +37,55 @@
 		2.通过函数形式的provide配合Vue.observable方法,可以实现响应式的效果
 		3.如果项目中存在多个provide,那么inject接收的数据,就会从父组件开始逐层想上查找
 
+3.自定义事件
+	自定义事件和原生事件的区别
+		语法:
+			1.如果给template中的原生html标签,用@绑定事件,那么该事件就是原生DOM事件
+			2.如果给template中的Vue组件标签,用@绑定事件,那么该事件就是自定义事件
+
+		触发:
+			原生事件的触发由浏览器负责,自定义事件的触发,需要在Vue中调用$emit方法才能触发
+
+	v-model(双向数据绑定)
+		对input标签使用
+			1.将data中的数据作为input框的默认值进行展示(属性名为value)
+    			<input type="text" :value="username">
+
+			2.当用户修改input框的内容时,会同步修改data中对应的状态数据(事件名为input)
+   			<input type="text" :value="username" @input="(event)=>username=event.target.value"/>
+
+		对组件标签使用
+			1.将data中的数据作为组件标签的标签属性向下传递(属性名默认为value)
+    				<HelloWorld :value="username"/>
+				其实就是通过标签属性实现父向子传参
+
+			2.给组件标签绑定自定义事件,子组件可以触发该自定义事件来修改父组件的数据(事件名默认为input)
+				<HelloWorld :value="username" @input="(data)=>username=data" />
+				其实就是通过自定义事件实现子向父传参
+
+			注意:通过model配置项可以修改绑定的标签属性和自定义事件名称
+
+4.找到对应组件的实例对象
+	$parent->可以找到当前组件的父组件实例对象
+		得到的实例对象其实就是父组件中的this
+
+	$root->可以找到当前项目中的根组件实例对象
+		根组件指的是main.js中new Vue创建的实例对象
+
+	$children->可以获得所有子组件实例对象组成的数组
+		注意:
+			1.如果子组件存在异步组件,那么该数组的顺序可能会与template中的排列顺序不相同
+			2.数组不是响应式的,即便将数组中组件的排列顺序进行修改,页面上的显示顺序也不会发生变化
+
+	$refs->可以配合ref标签属性获取到对应标签的内容
+		如果对原生标签使用ref
+			$refs得到的就是对应标签的原生DOM对象
+
+		如果对组件标签使用ref
+			$refs得到的就是组件标签的组件实例对象,也就是组件内部的this
+
+	
+
 
 
 

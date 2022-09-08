@@ -10,7 +10,14 @@ export default {
   props: {
     msg: String
   },
+  data(){
+    return{
+      msg2:"我是子组件的数据"
+    }
+  },
   mounted(){
+    // console.log('$parent',this.$parent.msg)
+    // console.log('$root',this.$root)
   }
 }
 </script>
