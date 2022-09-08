@@ -1,8 +1,16 @@
 <template>
   <div id="app">
-    <h1>App username:{{username}}</h1>
-    <HelloWorld :username.sync="username" msg="Welcome to Your Vue.js App" />
-    <!-- <HelloWorld :username="username" @update:username="(data)=>username=data" msg="Welcome to Your Vue.js App" /> -->
+    <HelloWorld msg="Welcome to Your Vue.js App">
+      <template v-slot:default>
+        <div>我是默认插槽</div>
+      </template>
+      <template #header>
+        <div>我是header插槽</div>
+      </template>
+      <template #footer="scope">
+        <div>我是footer插槽,{{scope.msg}}</div>
+      </template>
+    </HelloWorld>
   </div>
 </template>
 
@@ -16,7 +24,6 @@ export default {
   },
   data() {
     return {
-      username:"xiao"
     }
   },
   mounted() {

@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <!-- <h1 v-pre>{{username}}</h1> -->
+    <h1 v-once>{{username}}</h1>
     <HelloWorld msg="Welcome to Your Vue.js App" />
   </div>
 </template>
@@ -14,9 +16,11 @@ export default {
   },
   data() {
     return {
+      username:"xiaoming"
     }
   },
   mounted() {
+    this.username = "老王"
   },
 }
 </script>
