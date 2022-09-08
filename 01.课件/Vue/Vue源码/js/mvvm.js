@@ -94,11 +94,43 @@ function MVVM(options) {
                     1.判断新值与旧值是否相同,如果相同就return,什么都不做
                     2.对属性值进行深度劫持
                     3.通过调用dep.notify方法通知DOM进行更新
+
+        注意点:
+            每个响应式属性会创建一个dep对象
    */
 
   observe(data, this);
-//   observe(options.data, vm);
+  //   observe(options.data, vm);
 
+  /*
+    MVVM源码第三部分:模版解析
+    
+    目的:获取到当前项目的模版代码,将内部的插值语法等内容替换成对应的数据进行展示
+
+    流程:
+        1.将options的el属性传给Compile函数,进行构造调用
+        2.检查el是字符串,还是真实DOM,如果是字符串就查找页面上对应的真实DOM
+        3.将el元素中所有的直系子节点,全部转移到文档碎片fragment中
+        4.调用init方法,开始解析fragment中所有的直系子节点
+        5.调用compileElement函数
+            如果子节点是元素节点,就去获取他所有的标签属性
+                查看标签属性中,是否具有vue指令,有就解析得到对应效果
+
+            如果子节点是文本节点,而且通过了插值语法的正则匹配
+                就执行流程6
+
+        6.开始调用bind方法,准备解析该文本内容
+        7.首先获取到用于更新文本的文本更新器textUpdater函数
+        8.将当前文本节点,以及当前插值语法表达式的结果读取出来作为实参传递给textUpdater函数
+        9.textUpdater函数根据表达式的结果,更新文本节点的文本内容
+        10.最后,将fragment节点插入到页面的el元素中,进行页面渲染
+
+    注意:
+        1.在bind方法中,会new Watcher函数,创建watcher对象
+            当页面上每存在一个插值语法的时候,就会调用一次bind方法
+                也就是说每个插值语法会生成一个对应的watcher对象
+*/
+//   this.$compile = new Compile("#app" || document.body, vm);
   this.$compile = new Compile(options.el || document.body, this);
 }
 
