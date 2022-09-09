@@ -21,7 +21,11 @@ export default {
       showA3:true
     }
   },
-  mounted(){
+  beforeMount(){
+    console.log('---------Hello beforeMount---------')
+  },
+  mounted() {
+    console.log('---------Hello mounted---------')
   },
   methods:{
     show(){

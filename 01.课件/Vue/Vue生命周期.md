@@ -6,6 +6,7 @@
 2. 生命周期划分
    1. 初始化阶段
       1. beforeCreate
+         1. **在beforeCreate之前,Vue在初始化事件和生命周期**
       2. created
          1. 发送请求
             1. 优点:
@@ -13,7 +14,15 @@
                   1. 越早回来看到数据的时间就越早
             2. 缺点:由于JS引擎是单线程解析,所以如果该阶段的事情太多,很可能会阻塞后续代码执行,延长白屏时间
          2. 注意点:禁止在created做大量的逻辑操作
+         3. **beforeCreate之后created之前,Vue在实现数据代理和数据劫持,以及相关的内容注入**
+            1. **所谓的注入,就是将类似methods,data,props等中的东西全放到this身上,方便后续访问**
       3. beforeMount
+         1. **created之后beforeMount之前,Vue一定会准备好生成虚拟DOM的render方法**
+            1. **render方法可以生成虚拟DOM对象**
+         2. **解析的优先级:render配置>template配置>index.html模版**
+         3. **注意点:**
+            1. **网上的错误说法,很多人都说beforeMount之前会调用生成的render函数,来创建虚拟DOM**
+            2. **但是其实不会,beforeMount只会生成render函数,不会调用他**
       4. mounted
          1. 发送请求
             1. 优点:由于该阶段页面已经挂载结束,此处做事情不会影响到页面的渲染
@@ -23,6 +32,7 @@
          4. 操作真实DOM
             1. Swiper
             2. 滑动库
+         5. **beforeMount之后mounted之前,Vue会调用render函数生成虚拟DOM对象,再根据虚拟DOM生成真实DOM,最终替换掉页面上的el元素,最终由GUI线程渲染页面**
    2. 更新阶段
       1. beforeUpdate
          1. 数据已经变为最新数据,页面展示的还是旧的内容
