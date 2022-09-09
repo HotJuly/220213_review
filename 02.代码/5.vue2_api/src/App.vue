@@ -1,33 +1,29 @@
 <template>
   <div id="app">
-    <HelloWorld msg="Welcome to Your Vue.js App">
-      <template v-slot:default>
-        <div>我是默认插槽</div>
-      </template>
-      <template #header>
-        <div>我是header插槽</div>
-      </template>
-      <template #footer="scope">
-        <div>我是footer插槽,{{scope.msg}}</div>
-      </template>
-    </HelloWorld>
+    <ul>
+      <li v-for="item in arr" :key="item">{{item}}</li>
+    </ul>
+    <button @click="changeNum">修改数组</button>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  },
   data() {
     return {
+      arr:[1,2,3,4,5]
     }
   },
   mounted() {
   },
+  methods:{
+    changeNum(){
+      this.arr[1]=6;
+      console.log(this.arr)
+    }
+  }
 }
 </script>
 

@@ -8,6 +8,7 @@
     <div id="app">
       <p class="b">{{msg}}</p>
       <p class="b">{{person.name}}</p>
+      <p class="b">{{arr.1}}</p>
     </div>
     <script src="./js/observer.js"></script>
     <script src="./js/watcher.js"></script>
@@ -42,10 +43,14 @@
             name:"xiaoming",
             msg:"123"
           },
+          arr:[1,2,3]
         }
       });
 
-      vm.msg = 'hello atguigu';
+      // vm.msg = 'hello atguigu';
+      setTimeout(()=>{
+        vm.arr[1] = 6;
+      },3000)
 
 
     </script>
