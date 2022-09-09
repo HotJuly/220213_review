@@ -1,21 +1,24 @@
 <template>
   <div id="app">
-    <!-- <ul>
-      <li v-for="item in arr" :key="item">{{item}}</li>
+    <ul>
+      <li v-for="(item,index) in arr" :key="index">
+        <label>{{item}}</label>
+        <input type="text">
+      </li>
     </ul>
-    <button @click="changeNum">修改数组</button> -->
-    <HelloWorld></HelloWorld>
+    <button @click="changeNum">修改数组</button>
+    <!-- <HelloWorld></HelloWorld> -->
   </div>
 </template>
 
 <script>
-  import HelloWorld from './components/HelloWorld.vue';
+  // import HelloWorld from './components/HelloWorld.vue';
 
 export default {
   name: 'App',
-  components:{
-    HelloWorld
-  },
+  // components:{
+  //   HelloWorld
+  // },
   data() {
     return {
       arr:[1,2,3,4,5]
@@ -36,6 +39,8 @@ export default {
       // arr1.push(7);
 
       // this.arr.push(7)
+
+      this.arr.splice(2,0,6)
     }
   },
   updated(){
