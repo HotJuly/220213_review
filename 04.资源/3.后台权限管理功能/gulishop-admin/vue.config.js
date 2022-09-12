@@ -39,7 +39,10 @@ module.exports = {
     },
     proxy:{
       '/dev-api':{
-        target:"http://39.98.123.211",
+        // target:"http://39.98.123.211",          
+        // 后台接口地址
+        // 备用网址:'http://sph-h5-api.atguigu.cn/' 
+        target: 'http://gmall-h5-api.atguigu.cn/',
         pathRewrite:{
           '^/dev-api':''
         }
