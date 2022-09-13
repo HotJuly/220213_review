@@ -34,6 +34,7 @@ const getDefaultState = () => {
     routes:[],
 
     // 用于存储服务器返回的用户的buttons数组
+    // 用于实现按钮级权限管理
     buttons:[]
   }
 }
@@ -55,6 +56,8 @@ const mutations = {
   },
   SET_PERMISSION : (state,data) => {
     state.routeNames = data.routes;
+
+    state.buttons = data.buttons;
 
     // 通过filterAsyncRoutes方法过滤现在的所有的异步路由,
     // 最终返回一个当前用户可以访问的异步路由数组

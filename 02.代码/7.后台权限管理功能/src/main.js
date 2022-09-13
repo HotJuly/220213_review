@@ -59,6 +59,19 @@ Vue.use(ElementUI, { locale })
 Vue.config.productionTip = false
 
 
+Vue.directive("has-permission",{
+  inserted(el,{value}){
+    // console.log('has-permission',el,value)
+    // 如果用户没有该按钮的权限,就将该按钮删除
+    // value是当前按钮需要的权限,buttons才是用户拥有的权限
+    const result = store.state.user.buttons.includes(value);
+
+    if(!result){
+      el.parentNode.removeChild(el);
+    }
+  }
+})
+
 new Vue({
   el: '#app',
   router,
